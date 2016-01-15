@@ -17,7 +17,6 @@ def accumulate_size(size):
 
 
 def etl_dir(base_dir, *args):
-  print 'In Python', base_dir
   for root, dirs, files in os.walk(base_dir):
     for filename in files:
       if filename.lower().endswith('.csv'):
