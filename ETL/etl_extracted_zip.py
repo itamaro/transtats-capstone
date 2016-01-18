@@ -1,6 +1,5 @@
 #!/usr/bin/python2.7
 
-from cStringIO import StringIO
 import csv
 import os
 import sys
@@ -77,20 +76,25 @@ def accumulate_size(size):
   print 'Total size so far is', new_size
 
 
-def etl_dir(base_dir, *args):
-  for root, dirs, files in os.walk(base_dir):
+def etl_dir(in_dir, out_dir, *args):
+  for root, dirs, files in os.walk(in_dir):
     for filename in files:
       if filename.lower().endswith('.csv'):
         fullpath = os.path.join(root, filename)
+        out_csvpath = os.path.join(out_dir, filename)
         with open(fullpath, 'rb') as csvfile:
-          out_csv_buff = StringIO()
-          writer = csv.DictWriter(out_csv_buff, fieldnames=FIELDS)
-          writer.writeheader()
-          for row in csv.DictReader(csvfile):
-            writer.writerow({field: row[field] for field in FIELDS})
-        csvsize = len(out_csv_buff.getvalue())
-        out_csv_buff.close()
-        del out_csv_buff
+          with open(out_csvpath, 'wb') as out_csvfile:
+            writer = csv.DictWriter(out_csvfile, fieldnames=FIELDS)
+            writer.writeheader()
+            for row in csv.DictReader(csvfile):
+              filtered_row = {field: row[field] for field in FIELDS}
+              for value in filtered_row.itervalues():
+                if not value:
+                  # Skipping bad row
+                  break
+              else:  # if didn't break from the for
+                writer.writerow(filtered_row)
+        csvsize = os.path.getsize(out_csvpath)
         print 'filtered', filename, 'size is', csvsize
         accumulate_size(csvsize)
 
