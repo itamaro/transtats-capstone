@@ -3,6 +3,7 @@
 import argparse
 import csv
 from datetime import datetime, timedelta
+import itertools
 import sys
 
 
@@ -83,36 +84,35 @@ def reducer(args):
 
   def reset_state():
     for leg in ('FirstLeg', 'SecondLeg'):
-      state[leg] = {
-          'arr_delay': float('+inf'),
-          'xz_airport': None,
-          'flight_num': None,
-          'flight_dep': None,
-      }
+      state[leg] = {}
 
   for line in sys.stdin:
     key, value = line.split()
 
     if key != current_key:
       # Emit a route, if found one
-      if current_key and all(leg['flight_num'] for leg in state.itervalues()):
+      if current_key:
         y_airport, xy_flight_date = current_key.split(':')
         leg1, leg2 = state['FirstLeg'], state['SecondLeg']
-        print '\t'.join([
-            xy_flight_date, leg1['xz_airport'], y_airport, leg2['xz_airport'],
-            leg1['flight_num'], leg1['flight_dep'], leg2['flight_num'],
-            leg2['flight_dep'], str(leg1['arr_delay'] + leg2['arr_delay'])])
+        for x_airport, z_airport in itertools.product(leg1.iterkeys(), leg2.iterkeys()):
+          print '\t'.join([
+              xy_flight_date, x_airport, y_airport, z_airport,
+              leg1[x_airport]['flight_num'], leg1[x_airport]['flight_dep'],
+              leg2[z_airport]['flight_num'], leg2[z_airport]['flight_dep'],
+              str(leg1[x_airport]['arr_delay'] + leg2[z_airport]['arr_delay'])])
       reset_state()
       current_key = key
 
     # Extract packed fields within the value
-    leg, flight_num, value_airport, leg_dep_time, leg_arr_delay_str = value.split(':')
+    leg, flight_num, xz_airport, leg_dep_time, leg_arr_delay_str = value.split(':')
     leg_arr_delay = float(leg_arr_delay_str)
-    if leg_arr_delay < state[leg]['arr_delay']:
-      state[leg]['arr_delay'] = leg_arr_delay
-      state[leg]['xz_airport'] = value_airport
-      state[leg]['flight_num'] = flight_num
-      state[leg]['flight_dep'] = leg_dep_time
+    leg_state = state[leg].setdefault(xz_airport, {'arr_delay': leg_arr_delay,
+                                                   'flight_num': flight_num,
+                                                   'flight_dep': leg_dep_time})
+    if leg_arr_delay < leg_state['arr_delay']:
+      leg_state['arr_delay'] = leg_arr_delay
+      leg_state['flight_num'] = flight_num
+      leg_state['flight_dep'] = leg_dep_time
 
 
 if '__main__' == __name__:
