@@ -95,7 +95,6 @@ def reducer(args):
 
     if key != current_key:
       # Emit a route, if found one
-      all(leg['flight_num'] for leg in state.itervalues())
       if current_key and all(leg['flight_num'] for leg in state.itervalues()):
         y_airport, xy_flight_date = current_key.split(':')
         leg1, leg2 = state['FirstLeg'], state['SecondLeg']
