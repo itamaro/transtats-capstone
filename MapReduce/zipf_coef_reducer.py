@@ -15,7 +15,8 @@ def zipf_corr_coef():
   key (the value is ignored), sorted by the key as a numeric value, in reverse
   order (from highest to lowest).
 
-  In Hadoop, this sorting can be obtained using this option:
+  In Hadoop, this sorting can be obtained using these options:
+  mapred.output.key.comparator.class="org.apache.hadoop.mapred.lib.KeyFieldBasedComparator"
   mapreduce.partition.keycomparator.options="-k1nr"
   ("k1" means use first field as key, "n" means treat it as numeric value and
   not plain text, "r" means sort in reverse order).
