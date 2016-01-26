@@ -5,6 +5,8 @@ import csv
 import sys
 
 
+FIELDS = ['DayOfWeek', 'FlightDate', 'UniqueCarrier', 'FlightNum', 'Origin',
+          'Dest', 'DepTime', 'DepDelay', 'ArrTime', 'ArrDelay', 'Flights']
 DELAY_KINDS = {'arr': 'ArrDelay', 'dep': 'DepDelay'}
 KEY_FIELD = {'dow': 'DayOfWeek', 'airline': 'UniqueCarrier', 'dest': 'Dest'}
 
@@ -26,7 +28,7 @@ def sum_delay(args):
   """
   delay_field = DELAY_KINDS[args.delay]
   key = KEY_FIELD[args.key]
-  for row in csv.DictReader(sys.stdin):
+  for row in csv.DictReader(sys.stdin, fieldnames=FIELDS):
     try:
       flights = float(row['Flights'])
     except ValueError:

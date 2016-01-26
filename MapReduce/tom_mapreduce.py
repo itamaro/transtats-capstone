@@ -7,6 +7,8 @@ import itertools
 import sys
 
 
+FIELDS = ['DayOfWeek', 'FlightDate', 'UniqueCarrier', 'FlightNum', 'Origin',
+          'Dest', 'DepTime', 'DepDelay', 'ArrTime', 'ArrDelay', 'Flights']
 TOM_YEAR = 2008
 LEG1_MIN_DATE = datetime.strptime('2008-01-01', '%Y-%m-%d')
 LEG1_MAX_DATE = datetime.strptime('2008-12-29', '%Y-%m-%d')
@@ -27,14 +29,13 @@ def mapper(args):
   This contains the rest of the data I need for determining Tom's trip, but that
   I don't want to put in the key, because it would harm my grouping.
   """
-  for row in csv.DictReader(sys.stdin):
+  for row in csv.DictReader(sys.stdin, fieldnames=FIELDS):
     # Extract flight date/time information, and on-time performance
     try:
       flight_date = datetime.strptime(row['FlightDate'], '%Y-%m-%d')
       if flight_date.year != TOM_YEAR:
         continue  # not a Tom year
       dep_time = datetime.strptime(row['DepTime'], '%H%M')
-      # arr_time = datetime.strptime(row['ArrTime'], '%H%M')
     except ValueError:
       # probably reading a header line again
       continue

@@ -4,8 +4,12 @@ import csv
 import sys
 
 
+FIELDS = ['DayOfWeek', 'FlightDate', 'UniqueCarrier', 'FlightNum', 'Origin',
+          'Dest', 'DepTime', 'DepDelay', 'ArrTime', 'ArrDelay', 'Flights']
+
+
 def count_flights():
-  for row in csv.DictReader(sys.stdin):
+  for row in csv.DictReader(sys.stdin, fieldnames=FIELDS):
     try:
       flights = float(row['Flights'])
     except ValueError:
