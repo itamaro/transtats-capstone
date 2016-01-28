@@ -1,26 +1,23 @@
 #!/usr/bin/python
 
-from collections import defaultdict
 import sys
 
 
-MAX_KEYS = 3
-VALUES = defaultdict(float)
-COUNTS = defaultdict(int)
-
-
 def average_values_by_key():
+  key = current_key = None
   for line in sys.stdin:
     key, value_str, count_str = line.split()
-    VALUES[key] += float(value_str)
-    COUNTS[key] += int(count_str)
-    if len(VALUES) >= MAX_KEYS:
-      for done_key in VALUES.keys():
-        if done_key != key:
-          print '%s\t%f' % (done_key, VALUES.pop(done_key) / COUNTS.pop(done_key))
-  # Finished processing input - yield remaining keys
-  for done_key in VALUES.keys():
-    print '%s\t%f' % (done_key, VALUES.pop(done_key) / COUNTS.pop(done_key))
+    if key != current_key:
+      if current_key:
+        print '%s\t%f' % (current_key, sum_values / sum_counts)
+      current_key = key
+      sum_values = 0.0
+      sum_counts = 0
+    sum_values += float(value_str)
+    sum_counts += int(count_str)
+  # Finished processing input - yield final key
+  if key:
+    print '%s\t%f' % (key, sum_values / sum_counts)
 
 
 if '__main__' == __name__:
