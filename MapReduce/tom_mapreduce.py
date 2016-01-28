@@ -97,7 +97,7 @@ def reducer(args):
         leg1, leg2 = state['FirstLeg'], state['SecondLeg']
         for x_airport, z_airport in itertools.product(leg1.iterkeys(), leg2.iterkeys()):
           print '\t'.join([
-              xy_flight_date, x_airport, y_airport, z_airport,
+              ':'.join([xy_flight_date, x_airport, y_airport, z_airport]),
               leg1[x_airport]['flight_num'], leg1[x_airport]['flight_dep'],
               leg2[z_airport]['flight_num'], leg2[z_airport]['flight_dep'],
               str(leg1[x_airport]['arr_delay'] + leg2[z_airport]['arr_delay'])])
