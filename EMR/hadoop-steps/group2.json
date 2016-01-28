@@ -1,0 +1,91 @@
+[
+  {
+     "Name": "Carrier Departure Delays Per-Origin",
+     "Type": "STREAMING",
+     "ActionOnFailure": "CONTINUE",
+     "Args": [
+         "-files",
+         "s3://itamaro/code/sum_delay_mapper.py,s3://itamaro/code/average_aggregator.py",
+         "-mapper",
+         "sum_delay_mapper.py --key airline --delay dep --per_origin",
+         "-reducer",
+         "average_aggregator.py",
+         "-input",
+         "hdfs:///dataset",
+         "-output",
+         "hdfs:///intermediate/g2q1"
+    ]
+  },
+  {
+     "Name": "Top-10 Carrier Departure Delays Per-Origin",
+     "Type": "STREAMING",
+     "ActionOnFailure": "CONTINUE",
+     "Args": [
+         "-files",
+         "s3://itamaro/code/top_n_aggregator.py",
+         "-mapper",
+         "top_n_aggregator.py --reverse --keyspace \":\"",
+         "-reducer",
+         "top_n_aggregator.py --reverse --keyspace \":\"",
+         "-numReduceTasks",
+         "1",
+         "-input",
+         "hdfs:///intermediate/g2q1",
+         "-output",
+         "hdfs:///output/g2q1"
+    ]
+  },
+  {
+     "Name": "Destination Departure Delays Per-Origin",
+     "Type": "STREAMING",
+     "ActionOnFailure": "CONTINUE",
+     "Args": [
+         "-files",
+         "s3://itamaro/code/sum_delay_mapper.py,s3://itamaro/code/average_aggregator.py",
+         "-mapper",
+         "sum_delay_mapper.py --key dest --delay dep --per_origin",
+         "-reducer",
+         "average_aggregator.py",
+         "-input",
+         "hdfs:///dataset",
+         "-output",
+         "hdfs:///intermediate/g2q2"
+    ]
+  },
+  {
+     "Name": "Top-10 Destination Departure Delays Per-Origin",
+     "Type": "STREAMING",
+     "ActionOnFailure": "CONTINUE",
+     "Args": [
+         "-files",
+         "s3://itamaro/code/top_n_aggregator.py",
+         "-mapper",
+         "top_n_aggregator.py --reverse --keyspace \":\"",
+         "-reducer",
+         "top_n_aggregator.py --reverse --keyspace \":\"",
+         "-numReduceTasks",
+         "1",
+         "-input",
+         "hdfs:///intermediate/g2q2",
+         "-output",
+         "hdfs:///output/g2q2"
+    ]
+  },
+  {
+     "Name": "Mean Arrival Delay Per Origin-Destination",
+     "Type": "STREAMING",
+     "ActionOnFailure": "CONTINUE",
+     "Args": [
+         "-files",
+         "s3://itamaro/code/sum_delay_mapper.py,s3://itamaro/code/average_aggregator.py",
+         "-mapper",
+         "sum_delay_mapper.py --key dest --delay arr --per_origin",
+         "-reducer",
+         "average_aggregator.py",
+         "-input",
+         "hdfs:///dataset",
+         "-output",
+         "hdfs:///output/g2q4"
+    ]
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "Name": "Import Dataset From S3 to HDFS",
+    "Type": "CUSTOM_JAR",
+    "ActionOnFailure": "TERMINATE_CLUSTER",
+    "Jar": "/usr/share/aws/emr/s3-dist-cp/lib/s3-dist-cp-2.0.0.jar",
+    "Args": [
+        "--src",
+        "s3://itamaro/{{ input_data_dir }}/",
+        "--dest",
+        "hdfs:///dataset/"
+    ]
+  }
+]

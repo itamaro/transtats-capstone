@@ -1,0 +1,70 @@
+[
+  {
+     "Name": "Format Key/Value's For Hive For g2q1",
+     "Type": "STREAMING",
+     "ActionOnFailure": "CANCEL_AND_WAIT",
+     "Args": [
+         "-files",
+         "s3://itamaro/code/format_for_hive_mapper.py",
+         "-mapper",
+         "format_for_hive_mapper.py",
+         "-numReduceTasks",
+         "0",
+         "-input",
+         "hdfs:///output/g2q1",
+         "-output",
+         "hdfs:///hive_input/g2q1"
+    ]
+  },
+  {
+     "Name": "Format Key/Value's For Hive For g2q2",
+     "Type": "STREAMING",
+     "ActionOnFailure": "CANCEL_AND_WAIT",
+     "Args": [
+         "-files",
+         "s3://itamaro/code/format_for_hive_mapper.py",
+         "-mapper",
+         "format_for_hive_mapper.py",
+         "-numReduceTasks",
+         "0",
+         "-input",
+         "hdfs:///output/g2q2",
+         "-output",
+         "hdfs:///hive_input/g2q2"
+    ]
+  },
+  {
+     "Name": "Format Key/Value's For Hive For g2q4",
+     "Type": "STREAMING",
+     "ActionOnFailure": "CANCEL_AND_WAIT",
+     "Args": [
+         "-files",
+         "s3://itamaro/code/format_for_hive_mapper.py",
+         "-mapper",
+         "format_for_hive_mapper.py",
+         "-numReduceTasks",
+         "0",
+         "-input",
+         "hdfs:///output/g2q4",
+         "-output",
+         "hdfs:///hive_input/g2q4"
+    ]
+  },
+  {
+     "Name": "Format Key/Value's For Hive For g3q2",
+     "Type": "STREAMING",
+     "ActionOnFailure": "CANCEL_AND_WAIT",
+     "Args": [
+         "-files",
+         "s3://itamaro/code/format_for_hive_mapper.py",
+         "-mapper",
+         "format_for_hive_mapper.py",
+         "-numReduceTasks",
+         "0",
+         "-input",
+         "hdfs:///output/g3q2",
+         "-output",
+         "hdfs:///hive_input/g3q2"
+    ]
+  }
+]

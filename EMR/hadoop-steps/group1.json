@@ -1,0 +1,91 @@
+[
+  {
+     "Name": "Count Flights",
+     "Type": "STREAMING",
+     "ActionOnFailure": "CONTINUE",
+     "Args": [
+         "-files",
+         "s3://itamaro/code/count_flights_mapper.py",
+         "-mapper",
+         "count_flights_mapper.py",
+         "-reducer",
+         "aggregate",
+         "-input",
+         "hdfs:///dataset",
+         "-output",
+         "hdfs:///output/g1q1"
+    ]
+  },
+  {
+     "Name": "Carrier Arrival Delays",
+     "Type": "STREAMING",
+     "ActionOnFailure": "CONTINUE",
+     "Args": [
+         "-files",
+         "s3://itamaro/code/sum_delay_mapper.py,s3://itamaro/code/average_aggregator.py",
+         "-mapper",
+         "sum_delay_mapper.py --key airline --delay arr",
+         "-reducer",
+         "average_aggregator.py",
+         "-input",
+         "hdfs:///dataset",
+         "-output",
+         "hdfs:///intermediate/g1q2"
+    ]
+  },
+  {
+     "Name": "Top-10 Carrier Arrival Delays",
+     "Type": "STREAMING",
+     "ActionOnFailure": "CONTINUE",
+     "Args": [
+         "-files",
+         "s3://itamaro/code/top_n_aggregator.py",
+         "-mapper",
+         "top_n_aggregator.py --reverse",
+         "-reducer",
+         "top_n_aggregator.py --reverse",
+         "-numReduceTasks",
+         "1",
+         "-input",
+         "hdfs:///intermediate/g1q2",
+         "-output",
+         "hdfs:///output/g1q2"
+    ]
+  },
+  {
+     "Name": "DayOfWeek Arrival Delays",
+     "Type": "STREAMING",
+     "ActionOnFailure": "CONTINUE",
+     "Args": [
+         "-files",
+         "s3://itamaro/code/sum_delay_mapper.py,s3://itamaro/code/average_aggregator.py",
+         "-mapper",
+         "sum_delay_mapper.py --key dow --delay arr",
+         "-reducer",
+         "average_aggregator.py",
+         "-input",
+         "hdfs:///dataset",
+         "-output",
+         "hdfs:///intermediate/g1q3"
+    ]
+  },
+  {
+     "Name": "Top-10 DayOfWeek Arrival Delays",
+     "Type": "STREAMING",
+     "ActionOnFailure": "CONTINUE",
+     "Args": [
+         "-files",
+         "s3://itamaro/code/top_n_aggregator.py",
+         "-mapper",
+         "top_n_aggregator.py --reverse",
+         "-reducer",
+         "top_n_aggregator.py --reverse",
+         "-numReduceTasks",
+         "1",
+         "-input",
+         "hdfs:///intermediate/g1q3",
+         "-output",
+         "hdfs:///output/g1q3"
+    ]
+  }
+]

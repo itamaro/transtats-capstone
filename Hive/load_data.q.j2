@@ -1,0 +1,55 @@
+SET dynamodb.throughput.read.percent=1.5;
+SET dynamodb.throughput.write.percent=1.5;
+
+-- G2Q1
+create table g2q1(col_id string, origin string, airline string, delay float);
+load data inpath '/hive_input/g2q1' into table g2q1;
+
+create external table dynamo_g2q1(col_id string, origin string,
+                                  airline string, delay double)
+    stored by 'org.apache.hadoop.hive.dynamodb.DynamoDBStorageHandler'
+    tblproperties ("dynamodb.table.name" = "{{ dynamodb_prefix }}.g2q1",
+                   "dynamodb.column.mapping" = "col_id:col_id,origin:origin,airline:airline,delay:delay");
+
+insert into table dynamo_g2q1 select * from g2q1;
+
+-- G2Q2
+create table g2q2(col_id string, origin string, dest string, delay double);
+load data inpath '/hive_input/g2q2' into table g2q2;
+
+create external table dynamo_g2q2(col_id string, origin string,
+                                  dest string, delay double)
+    stored by 'org.apache.hadoop.hive.dynamodb.DynamoDBStorageHandler'
+    tblproperties ("dynamodb.table.name" = "{{ dynamodb_prefix }}.g2q2",
+                   "dynamodb.column.mapping" = "col_id:col_id,origin:origin,dest:dest,delay:delay");
+
+insert into table dynamo_g2q2 select * from g2q2;
+
+-- G2Q4
+create table g2q4(col_id string, origin string, dest string, mean_delay double);
+load data inpath '/hive_input/g2q4' into table g2q4;
+
+create external table dynamo_g2q4(col_id string, origin string,
+                                  dest string, mean_delay double)
+    stored by 'org.apache.hadoop.hive.dynamodb.DynamoDBStorageHandler'
+    tblproperties ("dynamodb.table.name" = "{{ dynamodb_prefix }}.g2q4",
+                   "dynamodb.column.mapping" = "col_id:col_id,origin:origin,dest:dest,mean_delay:mean_delay");
+
+insert into table dynamo_g2q4 select * from g2q4;
+
+-- G3Q2
+create table g3q2(col_id string, flight_date string,
+                  x_airport string, y_airport string, z_airport string,
+                  leg1_flight string, leg1_time string,
+                  leg2_flight string, leg2_time string, delay double);
+load data inpath '/hive_input/g3q2' into table g3q2;
+
+create external table dynamo_g3q2(col_id string, flight_date string,
+                                  x_airport string, y_airport string, z_airport string,
+                                  leg1_flight string, leg1_time string,
+                                  leg2_flight string, leg2_time string, delay double)
+    stored by 'org.apache.hadoop.hive.dynamodb.DynamoDBStorageHandler'
+    tblproperties ("dynamodb.table.name" = "{{ dynamodb_prefix }}.g3q2",
+                   "dynamodb.column.mapping" = "col_id:col_id,flight_date:flight_date,x_airport:x_airport,y_airport:y_airport,z_airport:z_airport,leg1_flight:leg1_flight,leg1_time:leg1_time,leg2_flight:leg2_flight,leg2_time:leg2_time,delay:delay");
+
+insert into table dynamo_g3q2 select * from g3q2;

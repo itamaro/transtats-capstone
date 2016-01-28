@@ -1,0 +1,14 @@
+[
+  {
+    "Name": "Backup HDFS Outputs In S3",
+    "Type": "CUSTOM_JAR",
+    "ActionOnFailure": "CANCEL_AND_WAIT",
+    "Jar": "/usr/share/aws/emr/s3-dist-cp/lib/s3-dist-cp-2.0.0.jar",
+    "Args": [
+        "--src",
+        "hdfs:///output/",
+        "--dest",
+        "s3://itamaro/output/{{ backup_data_dir }}/"
+    ]
+  }
+]
