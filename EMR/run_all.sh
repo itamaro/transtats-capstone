@@ -35,7 +35,7 @@ if [ -z "$NODES" ]; then
   NODES="1"
 fi
 
-echo "Starting at $(date)"
+echo "Starting run on dataset s3://itamaro/$DATASET at $(date)"
 
 echo "Copying latest code from $LOCAL_CODE_DIR to S3 at $REMOTE_CODE_DIR"
 aws s3 cp "$LOCAL_CODE_DIR" "$REMOTE_CODE_DIR" --recursive
@@ -84,6 +84,6 @@ echo "~~~ Failed Steps: ~~~"
 aws emr list-steps --cluster-id $CLUSTER_ID --step-states FAILED | \
     python get_json_field.py --pretty Steps
 
-echo "Finished at $(date)"
+echo "Finished run on dataset s3://itamaro/$DATASET at $(date)"
 echo "To terminate the cluster, run:"
 echo aws emr terminate-clusters --cluster-ids $CLUSTER_ID
