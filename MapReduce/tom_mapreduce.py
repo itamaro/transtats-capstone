@@ -88,7 +88,7 @@ def reducer(args):
       state[leg] = {}
 
   for line in sys.stdin:
-    key, value = line.split()
+    key, value = line.split('\t', 2)
 
     if key != current_key:
       # Emit a route, if found one

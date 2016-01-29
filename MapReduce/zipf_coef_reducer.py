@@ -29,8 +29,12 @@ def zipf_corr_coef():
   sig_xy = sig_x = sig_y = sig_xx = sig_yy = 0.0
 
   for line in sys.stdin:
-    freq_str, airport = line.split()
-    freq = float(freq_str)
+    freq_str = line.split('\t')[0]
+    try:
+      freq = float(freq_str)
+    except ValueError:
+      sys.stderr.write('WTF %s\n' % (line))
+      continue
     if freq != current_freq:
       rank, current_freq = rank + 1, freq
     x = math.log(rank)

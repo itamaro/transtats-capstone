@@ -11,7 +11,7 @@ KEYSPACES = defaultdict(dict)
 
 def top_values(args):
   for line in sys.stdin:
-    key, value_str = line.split()
+    key, value_str = line.split('\t', 2)
     value = float(value_str)
     if args.keyspace:
       keyspace, key = key.split(args.keyspace)

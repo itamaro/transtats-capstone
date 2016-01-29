@@ -6,7 +6,7 @@ import sys
 def average_values_by_key():
   key = current_key = None
   for line in sys.stdin:
-    key, value_str, count_str = line.split()
+    key, value_str, count_str = line.split('\t', 3)
     if key != current_key:
       if current_key:
         print '%s\t%f' % (current_key, sum_values / sum_counts)
