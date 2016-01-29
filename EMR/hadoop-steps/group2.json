@@ -1,6 +1,6 @@
 [
   {
-     "Name": "Carrier Departure Delays Per-Origin",
+     "Name": "Average Carrier Departure Delays Per-Origin",
      "Type": "STREAMING",
      "ActionOnFailure": "CONTINUE",
      "Args": [
@@ -36,7 +36,7 @@
     ]
   },
   {
-     "Name": "Destination Departure Delays Per-Origin",
+     "Name": "Average Destination Departure Delays Per-Origin",
      "Type": "STREAMING",
      "ActionOnFailure": "CONTINUE",
      "Args": [
