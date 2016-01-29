@@ -1,5 +1,22 @@
 [
   {
+     "Name": "Count Flights",
+     "Type": "STREAMING",
+     "ActionOnFailure": "CONTINUE",
+     "Args": [
+         "-files",
+         "s3://itamaro/code/count_flights_mapper.py",
+         "-mapper",
+         "count_flights_mapper.py",
+         "-reducer",
+         "aggregate",
+         "-input",
+         "hdfs:///dataset",
+         "-output",
+         "hdfs:///output/flight_count"
+    ]
+  },
+  {
      "Name": "Zipf Distribution Fit Test",
      "Type": "STREAMING",
      "ActionOnFailure": "CONTINUE",
@@ -17,7 +34,7 @@
          "-numReduceTasks",
          "1",
          "-input",
-         "hdfs:///output/g1q1",
+         "hdfs:///output/flight_count",
          "-output",
          "hdfs:///output/g3q1"
     ]

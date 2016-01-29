@@ -38,7 +38,6 @@ echo "Clearing out output directory $OUTPUT_DIR"
 rm $OUTPUT_DIR/* &> /dev/null
 
 # Group 1 questions
-run_test g1q1 count_flights_all_csvs &
 run_test g1q2 rank_ontime_perf_all_csvs --key airline --reverse --delay arr &
 run_test g1q3 rank_ontime_perf_all_csvs --key dow     --reverse --delay arr &
 wait
@@ -50,7 +49,9 @@ run_test g2q4 average_delay --delay arr --key dest &
 wait
 
 # Group 3 questions
-run_test g3q1 test_zipf_dist
+run_test flight_count count_flights_all_csvs &
+run_test g3q1 test_zipf_dist &
 # no manual test for Tom's challenge
+wait
 
 echo "Finished at $(date)"

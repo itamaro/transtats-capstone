@@ -1,22 +1,5 @@
 [
   {
-     "Name": "Count Flights",
-     "Type": "STREAMING",
-     "ActionOnFailure": "CONTINUE",
-     "Args": [
-         "-files",
-         "s3://itamaro/code/count_flights_mapper.py",
-         "-mapper",
-         "count_flights_mapper.py",
-         "-reducer",
-         "aggregate",
-         "-input",
-         "hdfs:///dataset",
-         "-output",
-         "hdfs:///output/g1q1"
-    ]
-  },
-  {
      "Name": "Carrier Arrival Delays",
      "Type": "STREAMING",
      "ActionOnFailure": "CONTINUE",
