@@ -1,6 +1,6 @@
 [
   {
-     "Name": "Carrier Arrival Delays",
+     "Name": "Average Carrier Arrival Delays",
      "Type": "STREAMING",
      "ActionOnFailure": "CONTINUE",
      "Args": [
@@ -36,7 +36,7 @@
     ]
   },
   {
-     "Name": "DayOfWeek Arrival Delays",
+     "Name": "Average DayOfWeek Arrival Delays",
      "Type": "STREAMING",
      "ActionOnFailure": "CONTINUE",
      "Args": [
@@ -53,7 +53,7 @@
     ]
   },
   {
-     "Name": "Top-10 DayOfWeek Arrival Delays",
+     "Name": "Top DayOfWeek Arrival Delays",
      "Type": "STREAMING",
      "ActionOnFailure": "CONTINUE",
      "Args": [
