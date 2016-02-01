@@ -1,7 +1,7 @@
 #!/bin/bash
 
 usage_and_die() {
-  echo "Usage: $0 [dataset] [stack] [emr_core_nodes]" >&2
+  echo "Usage: $0 [dataset] [stack] [emr_core_nodes(=1)]" >&2
   exit 42
 }
 
