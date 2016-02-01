@@ -36,7 +36,7 @@ echo "Consider running \"./update_dynamodb_tables_capacity.sh\" now" \
 echo "Recommended for small dataset:"
 echo "./update_dynamodb_tables_capacity.sh $DATASET 1000 15000"
 echo "Recommended for large dataset:"
-echo "./update_dynamodb_tables_capacity.sh $DATASET 1000 50000"
+echo "./update_dynamodb_tables_capacity.sh $DATASET 1000 40000"
 
 HIVE_TMPL="$LOCAL_HIVE_DIR/load_data.q.j2"
 echo "Rendering Hive script from $HIVE_TMPL and uploading to S3 at $REMOTE_HIVE_DIR"
