@@ -31,6 +31,13 @@ if [ ! -d "$LOCAL_HIVE_DIR" ]; then
   exit 42
 fi
 
+echo "Consider running \"./update_dynamodb_tables_capacity.sh\" now" \
+     "to pump up write throughput for the duration of insertions to DynamoDB"
+echo "Recommended for small dataset:"
+echo "./update_dynamodb_tables_capacity.sh $DATASET 1000 15000"
+echo "Recommended for large dataset:"
+echo "./update_dynamodb_tables_capacity.sh $DATASET 1000 50000"
+
 HIVE_TMPL="$LOCAL_HIVE_DIR/load_data.q.j2"
 echo "Rendering Hive script from $HIVE_TMPL and uploading to S3 at $REMOTE_HIVE_DIR"
 python render_step.py "$HIVE_TMPL" -v dynamodb_prefix="$DATASET" |
@@ -45,3 +52,6 @@ aws emr add-steps --cluster-id $CLUSTER_ID \
     --steps Type=HIVE,Name='Load Results to DynamoDB Using Hive',ActionOnFailure=CANCEL_AND_WAIT,Args=[-f,"$REMOTE_HIVE_DIR/load_data.q"]
 
 wait_for_ready_cluster $CLUSTER_ID
+
+echo "Finished insetions - scaling down write capacity to save costs"
+./update_dynamodb_tables_capacity.sh "$DATASET" 10 10

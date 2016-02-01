@@ -1,0 +1,11 @@
+[
+  {
+    "Update": {
+      "IndexName": "origin-delay-index",
+      "ProvisionedThroughput": {
+        "ReadCapacityUnits": 10,
+        "WriteCapacityUnits": {{ write_capacity }}
+      }
+    }
+  }
+]

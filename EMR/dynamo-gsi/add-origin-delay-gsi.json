@@ -1,0 +1,24 @@
+[
+  {
+    "Create": {
+      "IndexName": "origin-delay-index",
+      "KeySchema": [
+        {
+          "AttributeName": "origin",
+          "KeyType": "HASH"
+        },
+        {
+          "AttributeName": "delay",
+          "KeyType": "RANGE"
+        }
+      ],
+      "Projection": {
+        "ProjectionType": "ALL"
+      },
+      "ProvisionedThroughput": {
+        "ReadCapacityUnits": 10,
+        "WriteCapacityUnits": 10
+      }
+    }
+  }
+]

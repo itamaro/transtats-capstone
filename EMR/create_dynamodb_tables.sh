@@ -1,7 +1,6 @@
 #!/bin/bash
 
 PREFIX="$1"
-WRITE_CAPACITY=5000
 
 if [ -z "$PREFIX" ]; then
   echo "Usage: $0 [tables_prefix]" >&2
@@ -14,7 +13,7 @@ aws dynamodb create-table --table-name "${PREFIX}.g2q1" \
                             AttributeName=origin,AttributeType=S \
     --key-schema AttributeName=col_id,KeyType=HASH \
                  AttributeName=origin,KeyType=RANGE \
-    --provisioned-throughput ReadCapacityUnits=100,WriteCapacityUnits=$WRITE_CAPACITY | \
+    --provisioned-throughput ReadCapacityUnits=10,WriteCapacityUnits=10 | \
     echo "Creating table $( python get_json_field.py TableDescription TableArn )"
 
 aws dynamodb create-table --table-name "${PREFIX}.g2q2" \
@@ -22,7 +21,7 @@ aws dynamodb create-table --table-name "${PREFIX}.g2q2" \
                             AttributeName=origin,AttributeType=S \
     --key-schema AttributeName=col_id,KeyType=HASH \
                  AttributeName=origin,KeyType=RANGE \
-    --provisioned-throughput ReadCapacityUnits=100,WriteCapacityUnits=$WRITE_CAPACITY | \
+    --provisioned-throughput ReadCapacityUnits=10,WriteCapacityUnits=10 | \
     echo "Creating table $( python get_json_field.py TableDescription TableArn )"
 
 aws dynamodb create-table --table-name "${PREFIX}.g2q4" \
@@ -30,11 +29,13 @@ aws dynamodb create-table --table-name "${PREFIX}.g2q4" \
                             AttributeName=origin,AttributeType=S \
     --key-schema AttributeName=col_id,KeyType=HASH \
                  AttributeName=origin,KeyType=RANGE \
-    --provisioned-throughput ReadCapacityUnits=100,WriteCapacityUnits=$WRITE_CAPACITY | \
+    --provisioned-throughput ReadCapacityUnits=10,WriteCapacityUnits=10 | \
     echo "Creating table $( python get_json_field.py TableDescription TableArn )"
 
 aws dynamodb create-table --table-name "${PREFIX}.g3q2" \
     --attribute-definitions AttributeName=col_id,AttributeType=S \
     --key-schema AttributeName=col_id,KeyType=HASH \
-    --provisioned-throughput ReadCapacityUnits=100,WriteCapacityUnits=$((6*WRITE_CAPACITY)) | \
+    --provisioned-throughput ReadCapacityUnits=10,WriteCapacityUnits=10 | \
     echo "Creating table $( python get_json_field.py TableDescription TableArn )"
+
+./add_dynamodb_gsi.sh "$PREFIX"
