@@ -13,13 +13,18 @@ DATASET="$1"
 STACK="$2"
 NODES="$3"
 TMPL_DIR="$( cd $( dirname $0 )/step-templates && pwd )"
-LOCAL_CODE_DIR="$( cd $( dirname $0 )/.. && pwd )/MapReduce"
 REMOTE_CODE_DIR="s3://itamaro/code"
 
-if [[ "$STACK" != "hadoop" ]]; then
-  echo "Only Hadoop supported at the moment" >&2
+if [[ "$STACK" == "hadoop" ]]; then
+  CODE_DIR="MapReduce"
+elif [[ "$STACK" == "spark" ]]; then
+  CODE_DIR="Spark"
+else
+  echo "Only Hadoop and Spark supported at the moment" >&2
   exit 42
 fi
+
+LOCAL_CODE_DIR="$( cd $( dirname $0 )/.. && pwd )/$CODE_DIR"
 
 if [ ! -d "$TMPL_DIR" ]; then
   echo "Could not find steps templates directory at $TMPL_DIR" >&2
@@ -54,12 +59,13 @@ CLUSTER_ID=$( aws emr create-cluster \
     --no-auto-terminate \
     --ec2-attributes AvailabilityZone=us-east-1a \
     --steps file://$IMPORT_STEP \
-    --applications Name=Hadoop Name=Spark Name=Hive | \
+    --applications Name=Hadoop Name=Spark Name=Hive \
+    --configurations file://./cluster-conf.json | \
     python get_json_field.py ClusterId )
 echo "Created EMR Cluster ID $CLUSTER_ID"
 rm "$IMPORT_STEP"
 
-./create_dynamodb_tables.sh "$DATASET"
+# ./create_dynamodb_tables.sh "$DATASET"
 
 echo "Waiting for cluster $CLUSTER_ID to be provisioned and bootstrapped..."
 aws emr wait cluster-running --cluster-id $CLUSTER_ID
@@ -74,7 +80,7 @@ python render_step.py "$TMPL_DIR/backup_output.json.j2" \
 aws emr add-steps --cluster-id $CLUSTER_ID --steps file://$BACKUP_STEP
 rm "$BACKUP_STEP"
 
-./load_to_dynamodb.sh "$CLUSTER_ID" "$DATASET"
+# ./load_to_dynamodb.sh "$CLUSTER_ID" "${DATASET}.${STACK}"
 
 echo "~~~ Summary of all steps: ~~~"
 aws emr list-steps --cluster-id $CLUSTER_ID | \

@@ -22,19 +22,29 @@ fi
 
 echo "Using EMR cluster $CLUSTER_ID to solve questions using $STACK"
 
-echo "Submitting Group-1 jobs"
-aws emr add-steps \
-    --cluster-id $CLUSTER_ID \
-    --steps file://$STEPS_DIR/group1.json
+if [[ "$STACK" == "hadoop" ]]; then
 
-echo "Submitting Group-2 jobs"
-aws emr add-steps \
-    --cluster-id $CLUSTER_ID \
-    --steps file://$STEPS_DIR/group2.json
+  echo "Submitting Group-1 jobs"
+  aws emr add-steps \
+      --cluster-id $CLUSTER_ID \
+      --steps file://$STEPS_DIR/group1.json
 
-echo "Submitting Group-3 jobs"
-aws emr add-steps \
-    --cluster-id $CLUSTER_ID \
-    --steps file://$STEPS_DIR/group3.json
+  echo "Submitting Group-2 jobs"
+  aws emr add-steps \
+      --cluster-id $CLUSTER_ID \
+      --steps file://$STEPS_DIR/group2.json
+
+  echo "Submitting Group-3 jobs"
+  aws emr add-steps \
+      --cluster-id $CLUSTER_ID \
+      --steps file://$STEPS_DIR/group3.json
+
+elif [[ "$STACK" == "spark" ]]; then
+
+  aws emr add-steps \
+      --cluster-id "$CLUSTER_ID" \
+      --steps Type=SPARK,Name='Spark Solver',ActionOnFailure=CONTINUE,Args=[--deploy-mode,cluster,s3://itamaro/code/solve.py]
+
+fi
 
 wait_for_ready_cluster $CLUSTER_ID
