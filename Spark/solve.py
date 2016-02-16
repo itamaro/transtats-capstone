@@ -101,7 +101,7 @@ def splitter(record):
 
 
 def hive_formatter(record):
-  return '\x01'.join(map(str, record))
+  return '{x[0]}:{x[1]}\x01{x[0]}\x01{x[1]}\x01{x[2]}'.format(x=record)
 
 
 def solve_g2q1(input_rdd, args):
@@ -128,7 +128,7 @@ def solve_g2q2(input_rdd, args):
 
 def solve_g2q4(input_rdd, args):
   def hive_formatter(record):
-    return '{x[0][0]}\x01{x[0][1]}\x01{x[1]}'.format(x=record)
+    return '{x[0][0]}:{x[0][1]}\x01{x[0][0]}\x01{x[0][1]}\x01{x[1]}'.format(x=record)
   mean_arrdelay_rdd = (
       input_rdd
       .flatMap(get_delay('Dest', 'ArrDelay', per_origin=True))
@@ -195,7 +195,7 @@ def prepare_for_join(record):
 
 
 def tom_hive_formatter(record):
-  return '\x01'.join(map(hive_formatter, record))
+  return '\x01'.join([':'.join(record[0]), '\x01'.join(record[0]), '\x01'.join(map(str, record[1]))])
 
 
 def solve_g3q2(input_rdd, args):
