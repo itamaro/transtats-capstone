@@ -35,7 +35,7 @@ aws dynamodb create-table --table-name "${PREFIX}.g2q4" \
 aws dynamodb create-table --table-name "${PREFIX}.g3q2" \
     --attribute-definitions AttributeName=col_id,AttributeType=S \
     --key-schema AttributeName=col_id,KeyType=HASH \
-    --provisioned-throughput ReadCapacityUnits=10,WriteCapacityUnits=10000 | \
+    --provisioned-throughput ReadCapacityUnits=10,WriteCapacityUnits=2000 | \
     echo "Creating table $( python get_json_field.py TableDescription TableArn )"
 
 ./add_dynamodb_gsi.sh "$PREFIX"

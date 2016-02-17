@@ -58,7 +58,8 @@ echo "Submitting Load-to-DynamoDB-with-Hive job"
 aws emr add-steps --cluster-id $CLUSTER_ID \
     --steps Type=HIVE,Name='Load Results to DynamoDB Using Hive',ActionOnFailure=CANCEL_AND_WAIT,Args=[-f,"$REMOTE_HIVE_DIR/load_data.q"]
 
+sleep 60
 wait_for_ready_cluster $CLUSTER_ID
 
-echo "Finished insetions - scaling down write capacity to save costs"
-./update_dynamodb_tables_capacity.sh "$DATASET" 10 10
+echo "Finished insertions - to scale down write capacity: run:"
+echo "./update_dynamodb_tables_capacity.sh "$DATASET" 10 10"
