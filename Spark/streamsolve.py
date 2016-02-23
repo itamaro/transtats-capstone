@@ -20,7 +20,7 @@ from pyspark.streaming.kafka import KafkaUtils
 
 SC = SparkContext(appName='Coursera Cloud Capstone Task 2')
 SSC = StreamingContext(SC, 300)
-BASE_DIR = '/Users/itamar/work/coursera/cloudcapstone/transtats-capstone'
+BASE_DIR = '/stream'
 CHKP_DIR = join(BASE_DIR, 'chkp')
 OUTPUT_DIR = join(BASE_DIR, 'spark_out')
 SSC.checkpoint(CHKP_DIR)
@@ -253,7 +253,7 @@ if '__main__' == __name__:
   streaming_input = KafkaUtils.createDirectStream(
       SSC, ['trans-data'],
       {
-          'metadata.broker.list': 'localhost:9092',
+          'metadata.broker.list': 'ip-10-232-141-24.ec2.internal:9092,ip-10-33-178-125.ec2.internal:9092',
           'auto.offset.reset': 'smallest',
       }).map(parse_csv)
   solve_g1q1(streaming_input)

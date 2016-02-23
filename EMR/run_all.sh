@@ -59,8 +59,8 @@ CLUSTER_ID=$( aws emr create-cluster \
     --no-auto-terminate \
     --ec2-attributes AvailabilityZone=us-east-1a \
     --steps file://$IMPORT_STEP \
-    --applications Name=Hadoop Name=Spark Name=Hive \
-    --configurations file://./cluster-conf.json | \
+    --bootstrap-actions '[{"Path":"s3://itamaro/emr.bootstrap/install_kafka.rb","Name":"Install Kafka"}]' \
+    --applications Name=Hadoop Name=Spark Name=Hive | \
     python get_json_field.py ClusterId )
 echo "Created EMR Cluster ID $CLUSTER_ID"
 rm "$IMPORT_STEP"
